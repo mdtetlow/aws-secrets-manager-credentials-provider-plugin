@@ -8,6 +8,7 @@ Access credentials from AWS Secrets Manager in your Jenkins jobs.
 ## Contents
 
 - [Caching](caching/index.md)
+- [Cross-Account Access](cross-account/index.md)
 - [Filters](filters/index.md)
 - [Networking](networking/index.md)
 - [Screenshots](screenshots/index.md)
@@ -21,7 +22,6 @@ Access credentials from AWS Secrets Manager in your Jenkins jobs.
 - Read-only view of Secrets Manager.
 - `CredentialsProvider` and `SecretSource` API support.
 - Credential metadata caching (duration: 5 minutes).
-- [Cross-account](http://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) Secrets Manager support with IAM roles.
  
 ## Setup 
 
@@ -41,6 +41,8 @@ Required permissions:
 Optional permissions:
 
 - `kms:Decrypt` (if you use a customer-managed KMS key to encrypt the secret)
+
+Note: Additional setup is required for [cross-account secrets access](cross-account/index.md).
 
 ## Usage
 
@@ -303,6 +305,7 @@ Available settings:
 - Endpoint Configuration
   - Service Endpoint
   - Signing Region
+- IAM cross-account role ARNs
 
 The plugin's default behavior requires **no configuration**.
 
@@ -326,6 +329,9 @@ unclassified:
     endpointConfiguration:
       serviceEndpoint: http://localhost:4584
       signingRegion: us-east-1
+    roles:
+    - arn:aws:iam::111111111111:role/foo
+    - arn:aws:iam::222222222222:role/bar
 ```
 
 ## Bugs
@@ -355,4 +361,3 @@ In your IDE:
 3. Start Moto: `mvn docker:build docker:start`.
 4. Run tests.
 5. Stop Moto: `mvn docker:stop`.
-

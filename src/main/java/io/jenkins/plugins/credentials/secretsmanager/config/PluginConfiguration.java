@@ -1,13 +1,11 @@
 package io.jenkins.plugins.credentials.secretsmanager.config;
 
+import hudson.Extension;
+import jenkins.model.GlobalConfiguration;
 import net.sf.json.JSONObject;
-
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.StaplerRequest;
-
-import hudson.Extension;
-import jenkins.model.GlobalConfiguration;
 
 @Extension
 @Symbol("awsCredentialsProvider")
@@ -20,6 +18,11 @@ public class PluginConfiguration extends GlobalConfiguration {
     private EndpointConfiguration endpointConfiguration;
 
     private Filters filters;
+
+    /**
+     * The IAM role ARNs to assume. For multi-account secrets retrieval.
+     */
+    private Roles roles;
 
     public PluginConfiguration() {
         load();
@@ -51,6 +54,16 @@ public class PluginConfiguration extends GlobalConfiguration {
         save();
     }
 
+    public Roles getRoles() {
+        return roles;
+    }
+
+    @DataBoundSetter
+    public void setRoles(Roles roles) {
+        this.roles = roles;
+        save();
+    }
+
     @Override
     public synchronized boolean configure(StaplerRequest req, JSONObject json) {
         // This method is unnecessary, except to apply the following workaround.
@@ -58,6 +71,7 @@ public class PluginConfiguration extends GlobalConfiguration {
         // https://groups.google.com/forum/#!msg/jenkinsci-dev/MuRJ-yPRRoo/AvoPZAgbAAAJ
         this.endpointConfiguration = null;
         this.filters = null;
+        this.roles = null;
 
         req.bindJSON(this, json);
         save();

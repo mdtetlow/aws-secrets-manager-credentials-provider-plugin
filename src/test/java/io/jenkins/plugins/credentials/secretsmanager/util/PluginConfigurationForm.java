@@ -19,6 +19,7 @@ public class PluginConfigurationForm {
     public void clear() {
         this.clearEndpointConfiguration();
         this.clearFilters();
+        this.clearRoles();
     }
 
     public void clearFilters() {
@@ -31,6 +32,19 @@ public class PluginConfigurationForm {
         form.getInputByName("_.tag").setChecked(true);
         form.getInputByName("_.key").setValueAttribute(key);
         form.getInputByName("_.value").setValueAttribute(value);
+    }
+
+    public void clearRoles() {
+        form.getInputByName("_.roles").setChecked(false);
+    }
+
+    public void setRole(String arn) {
+        form.getInputByName("_.roles").setChecked(true);
+        // TODO Use the 'Add' button to test multiple roles
+        final HtmlInput input = form
+                .getElementsByAttribute("div", "name", "arns").get(0)
+                .getOneHtmlElementByAttribute("input", "name", "_.value");
+        input.setValueAttribute(arn);
     }
 
     public void clearEndpointConfiguration() {
