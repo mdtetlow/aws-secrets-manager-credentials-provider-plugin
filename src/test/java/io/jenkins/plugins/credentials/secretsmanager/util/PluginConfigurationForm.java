@@ -3,10 +3,10 @@ package io.jenkins.plugins.credentials.secretsmanager.util;
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import io.jenkins.plugins.credentials.secretsmanager.config.Tag;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class PluginConfigurationForm {
 
@@ -25,12 +25,13 @@ public class PluginConfigurationForm {
         form.getInputByName("_.filters").setChecked(false);
     }
 
-    public void setFilter(String key, String value) {
+    public void setTagsFilter(Tag tag) {
+        // TODO support multiple tags
         form.getInputByName("_.filters").setChecked(true);
 
-        form.getInputByName("_.tag").setChecked(true);
-        form.getInputByName("_.key").setValueAttribute(key);
-        form.getInputByName("_.value").setValueAttribute(value);
+        clickRepeatableAddButton("Tags");
+        form.getInputByName("_.key").setValueAttribute(tag.getKey());
+        form.getInputByName("_.value").setValueAttribute(tag.getValue());
     }
 
     public void clearEndpointConfiguration() {
@@ -51,21 +52,18 @@ public class PluginConfigurationForm {
         return form.getOneHtmlElementByAttribute("div", "class", "error").getTextContent();
     }
 
-    private HtmlButton getValidateButton(String textContent) {
-        return form.getByXPath("//span[contains(string(@class),'validate-button')]//button")
+    private void clickRepeatableAddButton(String settingName) {
+        form.getByXPath(String.format("//td[contains(text(), '%s')]/following-sibling::td[@class='setting-main']//span[contains(string(@class),'repeatable-add')]//button[contains(text(), 'Add')]", settingName))
                 .stream()
-                .map(obj -> (HtmlButton) (obj))
-                .filter(button -> button.getTextContent().equals(textContent))
-                .collect(Collectors.toList())
-                .get(0);
+                .findFirst()
+                .ifPresent(button -> clickOrThrowException((HtmlButton) button));
     }
 
     public FormValidationResult clickValidateButton(String textContent) {
-        try {
-            this.getValidateButton(textContent).click();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        form.getByXPath(String.format("//span[contains(string(@class),'validate-button')]//button[contains(text(), '%s')]", textContent))
+                .stream()
+                .findFirst()
+                .ifPresent(button -> clickOrThrowException((HtmlButton) button));
 
         try {
             final String success = this.getValidateSuccessMessage();
@@ -73,6 +71,14 @@ public class PluginConfigurationForm {
         } catch (ElementNotFoundException ignored) {
             final String failure = this.getValidateErrorMessage();
             return FormValidationResult.error(failure);
+        }
+    }
+
+    private static void clickOrThrowException(HtmlButton button) {
+        try {
+            button.click();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

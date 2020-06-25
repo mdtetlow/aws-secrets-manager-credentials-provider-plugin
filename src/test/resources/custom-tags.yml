@@ -1,6 +1,6 @@
 unclassified:
   awsCredentialsProvider:
     filters:
-      tag:
-        key: product
-        value: foobar
+      tags:
+      - key: product
+        value: foo

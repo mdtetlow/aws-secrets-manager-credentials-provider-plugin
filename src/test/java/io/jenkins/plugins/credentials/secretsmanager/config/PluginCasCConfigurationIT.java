@@ -21,7 +21,7 @@ public class PluginCasCConfigurationIT extends AbstractPluginConfigurationIT {
     }
 
     @Override
-    protected void setTagFilters(String key, String value) {
+    protected void setTagsFilter(Tag tag) {
         // no-op (configured by annotations)
     }
 
@@ -41,8 +41,8 @@ public class PluginCasCConfigurationIT extends AbstractPluginConfigurationIT {
 
     @Override
     @Test
-    @ConfiguredWithCode("/custom-tag.yml")
-    public void shouldCustomiseTagFilter() {
-        super.shouldCustomiseTagFilter();
+    @ConfiguredWithCode("/custom-tags.yml")
+    public void shouldCustomiseTagsFilter() {
+        super.shouldCustomiseTagsFilter();
     }
 }

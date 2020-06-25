@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.assertj.core.groups.Tuple.tuple;
 
 public abstract class AbstractPluginConfigurationIT {
 
@@ -11,7 +12,7 @@ public abstract class AbstractPluginConfigurationIT {
 
     protected abstract void setEndpointConfiguration(String serviceEndpoint, String signingRegion);
 
-    protected abstract void setTagFilters(String key, String value);
+    protected abstract void setTagsFilter(Tag tag);
 
     @Test
     public void shouldHaveDefaultConfiguration() {
@@ -39,16 +40,16 @@ public abstract class AbstractPluginConfigurationIT {
     }
 
     @Test
-    public void shouldCustomiseTagFilter() {
+    public void shouldCustomiseTagsFilter() {
         // Given
-        setTagFilters("product", "foobar");
+        setTagsFilter(new Tag("product", "foo"));
 
         // When
         final PluginConfiguration config = getPluginConfiguration();
 
         // Then
-        assertThat(config.getFilters().getTag())
+        assertThat(config.getFilters().getTags())
                 .extracting("key", "value")
-                .containsOnly("product", "foobar");
+                .containsOnly(tuple("product", "foo"));
     }
 }

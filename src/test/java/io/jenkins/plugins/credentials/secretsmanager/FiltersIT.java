@@ -3,7 +3,6 @@ package io.jenkins.plugins.credentials.secretsmanager;
 import com.amazonaws.services.secretsmanager.model.CreateSecretRequest;
 import com.amazonaws.services.secretsmanager.model.CreateSecretResult;
 import com.amazonaws.services.secretsmanager.model.Tag;
-import hudson.util.Secret;
 import io.jenkins.plugins.casc.misc.ConfiguredWithCode;
 import io.jenkins.plugins.credentials.secretsmanager.factory.Type;
 import io.jenkins.plugins.credentials.secretsmanager.util.*;
@@ -15,7 +14,6 @@ import org.junit.rules.RuleChain;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 
 public class FiltersIT {
 
@@ -30,18 +28,24 @@ public class FiltersIT {
 
     @Test
     @ConfiguredWithCode(value = "/tags.yml")
-    public void shouldFilterByTag() {
+    public void shouldFilterByTags() {
         // Given
-        final CreateSecretResult foo = createSecret("supersecret", Lists.of(AwsTags.type(Type.string), AwsTags.tag("product", "roadrunner")));
-        final CreateSecretResult bar = createSecret("supersecret", Lists.of(AwsTags.type(Type.string), AwsTags.tag("product", "coyote")));
+        final CreateSecretResult foo = createSecretWithTag("foo", "1");
+        final CreateSecretResult bar = createSecretWithTag("bar", "1");
+        final CreateSecretResult baz = createSecretWithTag("baz", "1");
 
         // When
         final List<StringCredentials> credentials = jenkins.getCredentials().lookup(StringCredentials.class);
 
         // Then
         assertThat(credentials)
-                .extracting("id", "secret")
-                .containsOnly(tuple(foo.getName(), Secret.fromString("supersecret")));
+                .extracting("id")
+                .containsOnly(foo.getName(), bar.getName())
+                .doesNotContain(baz.getName());
+    }
+
+    private CreateSecretResult createSecretWithTag(String key, String value) {
+        return createSecret("supersecret", Lists.of(AwsTags.type(Type.string), AwsTags.tag(key, value)));
     }
 
     private CreateSecretResult createSecret(String secretString, List<Tag> tags) {

@@ -6,6 +6,8 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
@@ -15,25 +17,37 @@ import hudson.model.Descriptor;
 
 public class Filters extends AbstractDescribableImpl<Filters> implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
-     * Filter secrets received by their AWS tag. (To pass, a secret must have the specified tag key
-     * with one of the specified values.)
+     * Filter secrets received by their AWS tags. This is an implicit Boolean OR: if a secret has ANY matching tag, it will be included.
      */
-    private Tag tag;
+    private List<Tag> tags;
+
+    @Deprecated
+    private transient Tag tag;
 
     @DataBoundConstructor
-    public Filters(Tag tag) {
-        this.tag = tag;
+    public Filters(List<Tag> tags) {
+        this.tags = tags;
     }
 
-    public Tag getTag() {
-        return tag;
+    protected Object readResolve() {
+        if (tag != null) {
+            tags = Collections.singletonList(tag);
+            tag = null;
+        }
+
+        return this;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
     }
 
     @DataBoundSetter
-    @SuppressWarnings("unused")
-    public void setTag(Tag tag) {
-        this.tag = tag;
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
     @Extension

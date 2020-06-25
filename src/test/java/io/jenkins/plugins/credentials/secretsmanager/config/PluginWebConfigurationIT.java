@@ -5,6 +5,9 @@ import io.jenkins.plugins.credentials.secretsmanager.util.PluginConfigurationFor
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 public class PluginWebConfigurationIT extends AbstractPluginConfigurationIT {
@@ -27,11 +30,11 @@ public class PluginWebConfigurationIT extends AbstractPluginConfigurationIT {
     }
 
     @Override
-    protected void setTagFilters(String key, String value) {
+    protected void setTagsFilter(Tag tag) {
         r.configure(f -> {
             final PluginConfigurationForm form = new PluginConfigurationForm(f);
 
-            form.setFilter(key, value);
+            form.setTagsFilter(tag);
         });
     }
 
@@ -41,14 +44,14 @@ public class PluginWebConfigurationIT extends AbstractPluginConfigurationIT {
             final PluginConfigurationForm form = new PluginConfigurationForm(f);
 
             form.setEndpointConfiguration("http://localhost:4584", "us-east-1");
-            form.setFilter("product", "foobar");
+            form.setTagsFilter(new Tag("product", "foobar"));
         });
 
         final PluginConfiguration configBefore = getPluginConfiguration();
 
         assertSoftly(s -> {
             s.assertThat(configBefore.getEndpointConfiguration()).as("Endpoint Configuration").isNotNull();
-            s.assertThat(configBefore.getFilters().getTag()).as("Filters").isNotNull();
+            s.assertThat(configBefore.getFilters().getTags()).as("Filters").isNotNull();
         });
 
         r.configure(f -> {

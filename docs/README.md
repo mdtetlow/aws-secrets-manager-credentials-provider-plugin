@@ -321,9 +321,9 @@ You can set plugin configuration using Jenkins [Configuration As Code](https://g
 unclassified:
   awsCredentialsProvider:
     filters:
-      tag:
-        key: product
-        value: roadrunner
+      tags:
+        - key: product
+          value: foo
     endpointConfiguration:
       serviceEndpoint: http://localhost:4584
       signingRegion: us-east-1

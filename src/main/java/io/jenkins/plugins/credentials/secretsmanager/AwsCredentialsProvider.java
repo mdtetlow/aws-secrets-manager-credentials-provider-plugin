@@ -109,9 +109,8 @@ public class AwsCredentialsProvider extends CredentialsProvider {
         final AWSSecretsManager client = builder.build();
 
         final Predicate<SecretListEntry> secretFilter;
-        if (filters != null && filters.getTag() != null) {
-            final Tag filterTag = new Tag().withKey(filters.getTag().getKey()).withValue(filters.getTag().getValue());
-            secretFilter = s -> Optional.ofNullable(s.getTags()).orElse(Collections.emptyList()).contains(filterTag);
+        if (filters != null) {
+            secretFilter = createFilter(filters);
         } else {
             secretFilter = s -> true;
         }
@@ -130,6 +129,16 @@ public class AwsCredentialsProvider extends CredentialsProvider {
                 .collect(Collectors.toMap(IdCredentials::getId, cred -> cred));
 
         return credentials.values();
+    }
+
+    private static Predicate<SecretListEntry> createFilter(Filters filters) {
+        final FilterBuilder builder = new FilterBuilder();
+
+        if (filters.getTags() != null) {
+            filters.getTags().forEach(tag -> builder.or(tag.getKey(), tag.getValue()));
+        }
+
+        return builder.build();
     }
 
     /**
