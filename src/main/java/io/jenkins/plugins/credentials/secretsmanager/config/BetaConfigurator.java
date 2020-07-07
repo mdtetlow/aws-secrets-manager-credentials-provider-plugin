@@ -37,12 +37,8 @@ public class BetaConfigurator extends BaseConfigurator<Beta>
     public Beta instance(Mapping mapping, ConfigurationContext context) {
         final PluginConfiguration config = PluginConfiguration.all().get(PluginConfiguration.class);
 
-        if (config == null) {
-            return null;
-        }
-
-        if (config.getBeta() == null) {
-            // avoid NPE when calling Beta#setRoles below
+        if (config == null || config.getBeta() == null) {
+            // avoid NPE
             return new Beta(null);
         }
 
