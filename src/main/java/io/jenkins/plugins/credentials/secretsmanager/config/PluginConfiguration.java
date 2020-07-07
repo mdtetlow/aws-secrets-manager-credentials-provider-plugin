@@ -11,6 +11,8 @@ import org.kohsuke.stapler.StaplerRequest;
 @Symbol("awsCredentialsProvider")
 public class PluginConfiguration extends GlobalConfiguration {
 
+    private Beta beta;
+
     /**
      * The AWS Secrets Manager endpoint configuration. If this is null, the default will be used. If
      * this is specified, the user's override will be used.
@@ -19,17 +21,23 @@ public class PluginConfiguration extends GlobalConfiguration {
 
     private Filters filters;
 
-    /**
-     * The IAM role ARNs to assume. For multi-account secrets retrieval.
-     */
-    private Roles roles;
-
     public PluginConfiguration() {
         load();
     }
 
     public static PluginConfiguration getInstance() {
         return all().get(PluginConfiguration.class);
+    }
+
+    public Beta getBeta() {
+        return beta;
+    }
+
+    @DataBoundSetter
+    @SuppressWarnings("unused")
+    public void setBeta(Beta beta) {
+        this.beta = beta;
+        save();
     }
 
     public EndpointConfiguration getEndpointConfiguration() {
@@ -54,24 +62,14 @@ public class PluginConfiguration extends GlobalConfiguration {
         save();
     }
 
-    public Roles getRoles() {
-        return roles;
-    }
-
-    @DataBoundSetter
-    public void setRoles(Roles roles) {
-        this.roles = roles;
-        save();
-    }
-
     @Override
     public synchronized boolean configure(StaplerRequest req, JSONObject json) {
         // This method is unnecessary, except to apply the following workaround.
         // Workaround: Set any optional struct fields to null before binding configuration.
         // https://groups.google.com/forum/#!msg/jenkinsci-dev/MuRJ-yPRRoo/AvoPZAgbAAAJ
+        this.beta = null;
         this.endpointConfiguration = null;
         this.filters = null;
-        this.roles = null;
 
         req.bindJSON(this, json);
         save();

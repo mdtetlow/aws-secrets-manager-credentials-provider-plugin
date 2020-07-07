@@ -6,7 +6,6 @@ import com.amazonaws.services.secretsmanager.model.Tag;
 import io.jenkins.plugins.casc.misc.ConfiguredWithCode;
 import io.jenkins.plugins.credentials.secretsmanager.factory.Type;
 import io.jenkins.plugins.credentials.secretsmanager.util.*;
-import org.assertj.core.api.Assertions;
 import org.jenkinsci.plugins.plaincredentials.StringCredentials;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -16,6 +15,7 @@ import org.junit.rules.RuleChain;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class RolesIT {
 
@@ -30,12 +30,12 @@ public class RolesIT {
 
     @Ignore("Moto does not support cross-account operations")
     public void shouldFetchCredentialsFromMultipleAccounts() {
-        Assertions.fail("Implement this test");
+        fail("Implement this test");
     }
 
     @Ignore("Moto does not support cross-account operations")
     public void shouldThrowExceptionWhenDuplicateSecretNamesPresent() {
-        Assertions.fail("Implement this test");
+        fail("Implement this test");
     }
 
     @Test

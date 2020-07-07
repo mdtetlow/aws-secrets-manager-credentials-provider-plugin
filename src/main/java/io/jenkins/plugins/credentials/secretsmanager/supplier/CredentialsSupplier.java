@@ -46,7 +46,7 @@ public class CredentialsSupplier implements Supplier<Collection<StandardCredenti
         final Filters filters = config.getFilters();
         final Predicate<SecretListEntry> secretFilter = newSecretFilter(filters);
 
-        final Roles roles = config.getRoles();
+        final Roles roles = Optional.ofNullable(config.getBeta()).map(beta -> beta.getRoles()).orElse(null);
         final List<String> roleArns = newRoleArns(roles);
 
         final Supplier<Collection<StandardCredentials>> mainSupplier =

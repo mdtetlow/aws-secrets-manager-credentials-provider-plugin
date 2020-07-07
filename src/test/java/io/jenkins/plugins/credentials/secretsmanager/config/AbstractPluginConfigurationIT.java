@@ -25,7 +25,7 @@ public abstract class AbstractPluginConfigurationIT {
         assertSoftly(s -> {
             s.assertThat(config.getEndpointConfiguration()).as("Endpoint Configuration").isNull();
             s.assertThat(config.getFilters()).as("Filters").isNull();
-            s.assertThat(config.getRoles()).as("Roles").isNull();
+            s.assertThat(config.getBeta()).as("Beta Features").isNull();
         });
     }
 
@@ -68,7 +68,7 @@ public abstract class AbstractPluginConfigurationIT {
         final PluginConfiguration config = getPluginConfiguration();
 
         // Then
-        assertThat(config.getRoles().getArns())
+        assertThat(config.getBeta().getRoles().getArns())
                 .extracting("value")
                 .containsOnly(foo);
     }

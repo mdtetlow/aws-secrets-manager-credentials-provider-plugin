@@ -59,7 +59,7 @@ public class PluginWebConfigurationIT extends AbstractPluginConfigurationIT {
         assertSoftly(s -> {
             s.assertThat(configBefore.getEndpointConfiguration()).as("Endpoint Configuration").isNotNull();
             s.assertThat(configBefore.getFilters().getTag()).as("Filters").isNotNull();
-            s.assertThat(configBefore.getRoles()).as("Roles").isNotNull();
+            s.assertThat(configBefore.getBeta().getRoles()).as("Roles").isNotNull();
         });
 
         r.configure(f -> {
@@ -73,7 +73,7 @@ public class PluginWebConfigurationIT extends AbstractPluginConfigurationIT {
         assertSoftly(s -> {
             s.assertThat(configAfter.getEndpointConfiguration()).as("Endpoint Configuration").isNull();
             s.assertThat(configAfter.getFilters()).as("Filters").isNull();
-            s.assertThat(configAfter.getRoles()).as("Roles").isNull();
+            s.assertThat(configAfter.getBeta().getRoles()).as("Roles").isNull();
         });
     }
 }

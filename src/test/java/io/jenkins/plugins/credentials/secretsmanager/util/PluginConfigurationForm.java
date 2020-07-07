@@ -31,7 +31,10 @@ public class PluginConfigurationForm {
 
         form.getInputByName("_.tag").setChecked(true);
         form.getInputByName("_.key").setValueAttribute(key);
-        form.getInputByName("_.value").setValueAttribute(value);
+        // The Jenkins config form HTML is not hierarchical, necessitating this fragile selector.
+        form.getInputsByName("_.value").stream()
+                .reduce((first, second) -> second)
+                .ifPresent(lastValueInputInForm -> lastValueInputInForm.setValueAttribute(value));
     }
 
     public void clearRoles() {
@@ -39,6 +42,7 @@ public class PluginConfigurationForm {
     }
 
     public void setRole(String arn) {
+        form.getInputByName("_.beta").setChecked(true);
         form.getInputByName("_.roles").setChecked(true);
         // TODO Use the 'Add' button to test multiple roles
         final HtmlInput input = form

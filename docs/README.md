@@ -7,8 +7,8 @@ Access credentials from AWS Secrets Manager in your Jenkins jobs.
 
 ## Contents
 
+- [Beta Features](beta/index.md)
 - [Caching](caching/index.md)
-- [Cross-Account Access](cross-account/index.md)
 - [Filters](filters/index.md)
 - [Networking](networking/index.md)
 - [Screenshots](screenshots/index.md)
@@ -21,6 +21,7 @@ Access credentials from AWS Secrets Manager in your Jenkins jobs.
 
 - Read-only view of Secrets Manager.
 - `CredentialsProvider` and `SecretSource` API support.
+- Client-side secret filters.
 - Credential metadata caching (duration: 5 minutes).
  
 ## Setup 
@@ -41,8 +42,6 @@ Required permissions:
 Optional permissions:
 
 - `kms:Decrypt` (if you use a customer-managed KMS key to encrypt the secret)
-
-Note: Additional setup is required for [cross-account secrets access](cross-account/index.md).
 
 ## Usage
 
@@ -329,9 +328,6 @@ unclassified:
     endpointConfiguration:
       serviceEndpoint: http://localhost:4584
       signingRegion: us-east-1
-    roles:
-    - arn:aws:iam::111111111111:role/foo
-    - arn:aws:iam::222222222222:role/bar
 ```
 
 ## Bugs
