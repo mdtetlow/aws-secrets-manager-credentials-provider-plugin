@@ -7,6 +7,7 @@ Access credentials from AWS Secrets Manager in your Jenkins jobs.
 
 ## Contents
 
+- [Authentication](authentication/index.md)
 - [Beta Features](beta/index.md)
 - [Caching](caching/index.md)
 - [Filters](filters/index.md)
@@ -16,13 +17,6 @@ Access credentials from AWS Secrets Manager in your Jenkins jobs.
   - [Changelog](https://github.com/jenkinsci/aws-secrets-manager-credentials-provider-plugin/releases)
   - [CI Build](https://ci.jenkins.io/blue/organizations/jenkins/Plugins%2Faws-secrets-manager-credentials-provider-plugin/)
   - [Issues](https://issues.jenkins-ci.org/issues/?jql=component+%3D+aws-secrets-manager-credentials-provider-plugin)
-
-## Features
-
-- Read-only view of Secrets Manager.
-- `CredentialsProvider` and `SecretSource` API support.
-- Client-side secret filters.
-- Credential metadata caching (duration: 5 minutes).
  
 ## Setup 
 
@@ -304,7 +298,6 @@ Available settings:
 - Endpoint Configuration
   - Service Endpoint
   - Signing Region
-- IAM cross-account role ARNs
 
 The plugin's default behavior requires **no configuration**.
 

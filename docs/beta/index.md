@@ -1,8 +1,6 @@
-# Beta Features
+# Beta
 
-The plugin sometimes contains beta features for experimentation, and for gathering community feedback.
-
-Current beta features:
+The plugin contains the following beta features:
 
 - [Cross-Account Access](cross-account/index.md)
 

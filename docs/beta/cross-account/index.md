@@ -21,8 +21,9 @@ unclassified:
 
 ## Considerations
 
-- **Do not add more AWS accounts than necessary.** Each additional AWS account necessitates another set of HTTP requests to retrieve secrets. This increases the time to populate the credential list. It also increases the risk of service degradation, as any of those requests could fail.
+**Do not add more AWS accounts than necessary.** Each additional AWS account necessitates another set of HTTP requests to retrieve secrets. This increases the time to populate the credential list. It also increases the risk of service degradation, as any of those requests could fail.
 
-## Restrictions
+## Limitations
 
-- **The secret name must be unique** across all AWS accounts that Jenkins uses. The credential provider will stop working when duplicate secret names are present: if this happens, delete or rename the duplicates, and then retry the failed Jenkins operation.
+- The secret name must be unique across all AWS accounts that Jenkins uses. The credential provider will stop working when duplicate secret names are present: if this happens, delete or rename the duplicates, and then retry the failed Jenkins operation.
+- Access to Secrets Manager in the primary account cannot currently be turned off in the plugin. This might be a problem if you only use the primary account as an entry point to other accounts, and don't intend Jenkins to access data in the primary account.
